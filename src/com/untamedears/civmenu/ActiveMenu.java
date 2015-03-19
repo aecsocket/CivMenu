@@ -11,10 +11,13 @@ public class ActiveMenu {
     List<MenuCommand> commands;
     List<String[]> args;
     String message;
+    final String ID;
 
-    public ActiveMenu(Player player) {
+    public ActiveMenu(Player player, String ID) {
         this.player = player;
+        this.ID = ID;
         commands = new ArrayList<MenuCommand>();
+        args = new ArrayList<String[]>();
     }
 
     public void addCommand(MenuCommand command, String[] args) {

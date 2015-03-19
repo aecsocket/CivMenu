@@ -17,13 +17,13 @@ public class CivMenuManager {
     static int DURATION = 60;
     static String COMMMAND_NAME = "civmenu";
 
-    public CivMenuManager(Plugin plugin) {
+    CivMenuManager(Plugin plugin) {
         this.plugin = plugin;
         this.actives = new HashMap<String, ActiveMenu>();
     }
 
     public boolean handelCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(!cmd.getName().equals(COMMMAND_NAME)){
+        if (!cmd.getName().equals(COMMMAND_NAME)) {
             return true;
         }
         if (args.length < 2) {
@@ -44,13 +44,17 @@ public class CivMenuManager {
         return active.execute(sender, index);
     }
 
-    public String getID() {
+    String getID() {
         String ID = UUID.randomUUID().toString();
         if (!actives.containsKey(ID)) {
             return ID;
         } else {
             return getID();
         }
+    }
+
+    void deactivate(String ID) {
+        actives.remove(ID);
     }
 
     public void registerActive(final String ID, ActiveMenu active) {
@@ -60,7 +64,7 @@ public class CivMenuManager {
 
             @Override
             public void run() {
-                actives.remove(ID);
+                deactivate(ID);
             }
 
         }.runTaskLater(this.plugin, 20 * DURATION);
