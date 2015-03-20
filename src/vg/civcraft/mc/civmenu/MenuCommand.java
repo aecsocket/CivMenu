@@ -1,5 +1,5 @@
 
-package com.untamedears.civmenu;
+package vg.civcraft.mc.civmenu;
 
 import org.bukkit.command.CommandSender;
 

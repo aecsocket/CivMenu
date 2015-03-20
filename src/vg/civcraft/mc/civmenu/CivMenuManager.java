@@ -1,4 +1,4 @@
-package com.untamedears.civmenu;
+package vg.civcraft.mc.civmenu;
 
 import java.util.HashMap;
 import java.util.Map;
