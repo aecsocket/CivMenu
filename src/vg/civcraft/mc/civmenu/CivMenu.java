@@ -40,13 +40,13 @@ public class CivMenu extends JavaPlugin {
     public static Menu newMenu() {
         return new Menu(manager);
     }
-    
+
     /**
      * Sends a message to the console
      *
      * @param message The message
      */
-    public static void toConsole(String message) {
+    static void toConsole(String message) {
         Bukkit.getLogger().info("[CivMenu] " + message);
     }
 }

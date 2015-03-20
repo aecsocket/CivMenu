@@ -9,6 +9,23 @@ import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
+/**
+ * The Menu class stores a collection of functionalized text Entrys which are
+ * displayed simultaneously to the user. Additionally the menu class provides
+ * the public interface for displaying the Menu to a player.
+ *
+ * Methods for adding Entrys to a Menu and altering the most most recently added
+ * Entry all return the Menu item, allowing for easy chained construction. For
+ * example:
+ * <pre>
+ * new Menu()
+ *   .addEntry("Header Text\n")
+ *   .addEntry("Button Text").setCommand(Command)
+ *   .addEntry("Tooltip").setHover("Tooltip Text")
+ *   .addEntry("Help Text").setInsertion("Insertion Text");
+ * Menu.send(player);
+ * </pre>
+ */
 public class Menu {
 
     List<Entry> entrys;
@@ -64,16 +81,32 @@ public class Menu {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(active.message)));
     }
 
+    /**
+     * Adds a new Entry to the menu with defined Text
+     *
+     * @param text Text of the Entry
+     * @return This Menu
+     */
     public Menu addEntry(String text) {
         ArrayList<Object> list = new ArrayList<Object>();
         list.add(text);
         return addEntry(list);
     }
-    
+
+    /**
+     * Adds a new Entry to the menu with defined Text.
+     *
+     * The text is given as a List of Objects to enable built in parsing by the
+     * entry class of objects such as ItemStack, Set{@literal <ItemStack\>}, or
+     * just String.
+     *
+     * @param text Text of the Entry in a list form
+     * @return This Menu
+     */
     public Menu addEntry(List<Object> text) {
         return addEntry(new Entry(text));
     }
-    
+
     /**
      * Adds an entry to the menu
      *
@@ -107,12 +140,34 @@ public class Menu {
     }
 
     /**
+     * Sets the text of the last entry in the menu
+     *
+     * @param text Text to set of Entry
+     * @return This menu
+     */
+    public Menu setText(String text) {
+        entrys.get(entrys.size() - 1).setText(text);
+        return this;
+    }
+
+    /**
      * Sets the hover of the last Entry in the Menu
      *
      * @param hover Hover to set of Entry
      * @return This menu
      */
     public Menu setHover(List<Object> hover) {
+        entrys.get(entrys.size() - 1).setHover(hover);
+        return this;
+    }
+
+    /**
+     * Sets the hover of the last Entry in the Menu
+     *
+     * @param hover Hover to set of Entry
+     * @return This menu
+     */
+    public Menu setHover(String hover) {
         entrys.get(entrys.size() - 1).setHover(hover);
         return this;
     }

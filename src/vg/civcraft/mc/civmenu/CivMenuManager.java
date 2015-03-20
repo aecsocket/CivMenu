@@ -22,7 +22,7 @@ public class CivMenuManager {
         this.actives = new HashMap<String, ActiveMenu>();
     }
 
-    public boolean handelCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    boolean handelCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!cmd.getName().equals(COMMMAND_NAME)) {
             return true;
         }
@@ -57,7 +57,7 @@ public class CivMenuManager {
         actives.remove(ID);
     }
 
-    public void registerActive(final String ID, ActiveMenu active) {
+    void registerActive(final String ID, ActiveMenu active) {
         actives.put(ID, active);
         new BukkitRunnable() {
             String newID = ID;
