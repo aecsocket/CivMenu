@@ -48,14 +48,14 @@ public class Menu implements MenuCommand {
         //Iterate through items adding them to the JSON String
         int index = 0;
         //Add divider
-        message+=new JSONObject().put("color","yellow")
-                .put("text","_____________________________________________________\n")
-                .toString()+",";
+        message += new JSONObject().put("color", "yellow")
+                .put("text", "_____________________________________________________\n")
+                .toString() + ",";
         //Add Entrys
         for (Entry entry : entrys) {
             List<JSONObject> entryJSON;
             //Registers the command with the active menu
-            if (entry.isClickable()) {
+            if (entry.hasCommand()) {
                 active.addCommand(entry.getCommand(), entry.getArgs());
                 entryJSON = entry.toJSON("/" + Manager.COMMMAND_NAME + " " + ID + " " + index);
                 index++;
@@ -185,6 +185,28 @@ public class Menu implements MenuCommand {
      */
     public Menu setHover(String hover) {
         entrys.get(entrys.size() - 1).setHover(hover);
+        return this;
+    }
+
+    /**
+     * Sets the suggest of the last Entry in the Menu
+     *
+     * @param suggest suggest to set of Entry
+     * @return This menu
+     */
+    public Menu setSuggest(List<Object> suggest) {
+        entrys.get(entrys.size() - 1).setSuggest(suggest);
+        return this;
+    }
+
+    /**
+     * Sets the suggest of the last Entry in the Menu
+     *
+     * @param suggest Suggest to set of Entry
+     * @return This menu
+     */
+    public Menu setSuggest(String suggest) {
+        entrys.get(entrys.size() - 1).setSuggest(suggest);
         return this;
     }
 

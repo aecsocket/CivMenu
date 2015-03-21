@@ -38,6 +38,7 @@ public class Entry {
 
     List<Object> text;
     List<Object> hover;
+    List<Object> suggest;
     String insertion;
     MenuCommand command;
     String[] args;
@@ -57,7 +58,11 @@ public class Entry {
      * @return If Entry is Clickable
      */
     boolean isClickable() {
-        return command != null || insertion != null;
+        return command != null || suggest != null || insertion != null;
+    }
+
+    boolean hasCommand() {
+        return command != null;
     }
 
     /**
@@ -81,6 +86,9 @@ public class Entry {
         }
         if (command != null) {
             JSONObject clickEvent = new JSONObject().put("action", "run_command").put("value", ID);
+            content.put("clickEvent", clickEvent);
+        } else if (suggest != null) {
+            JSONObject clickEvent = new JSONObject().put("action", "suggest_command").put("value", toString(suggest));
             content.put("clickEvent", clickEvent);
         }
         if (insertion != null) {
@@ -179,6 +187,35 @@ public class Entry {
     }
 
     /**
+     * Sets the suggest of the Entry
+     *
+     * The text is given as a List of Objects to enable built in parsing by the
+     * entry class of objects such as ItemStack, Set{@literal <ItemStack\>}, or
+     * just String. Vanilla objects and objects with custom display names will
+     * be parsed according to # DISPLAY_NAME, newer items not contained within
+     * the lookup file will be displayed by MATERIAL_NAME:DURABILITY
+     *
+     * @param suggest What to set the suggest to
+     * @return This Entry
+     */
+    public Entry setSuggest(List<Object> suggest) {
+        this.suggest = suggest;
+        return this;
+    }
+
+    /**
+     * Sets the suggest of the Entry to the given String
+     *
+     * @param suggest What to set the suggest to
+     * @return This Entry
+     */
+    public Entry setSuggest(String suggest) {
+        ArrayList<Object> list = new ArrayList<Object>();
+        list.add(suggest);
+        return setSuggest(list);
+    }
+    
+    /**
      * Sets the Command to execute on click
      *
      * @param command Command to execute
@@ -239,7 +276,7 @@ public class Entry {
                         itemStacks.add((ItemStack) setObject);
                     }
                 }
-                str+=PrettyItem(itemStacks);
+                str += PrettyItem(itemStacks);
             }
         }
         return str;

@@ -104,6 +104,9 @@ public class Manager {
             case "hover":
                 debugHover(player);
                 return true;
+            case "suggest":
+                debugSuggest(player);
+                return true;
         }
         return false;
     }
@@ -155,5 +158,9 @@ public class Manager {
         Menu menu = CivMenu.newMenu("Hover test\n");
         menu.addEntry("Hover Me!").setHover("Hover Text");
         menu.send(player);
+    }
+    
+    void debugSuggest(Player player) {
+        CivMenu.newMenu("Suggest text\n").addEntry("Suggestion").setSuggest("\\ctr").send(player);
     }
 }
