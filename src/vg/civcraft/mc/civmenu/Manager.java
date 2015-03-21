@@ -107,6 +107,9 @@ public class Manager {
             case "suggest":
                 debugSuggest(player);
                 return true;
+            case "namelayer":
+                namelayer(player);
+                return true;
         }
         return false;
     }
@@ -162,5 +165,71 @@ public class Manager {
     
     void debugSuggest(Player player) {
         CivMenu.newMenu("Suggest text\n").addEntry("Suggestion").setSuggest("\\ctr").send(player);
+    }
+    
+    void namelayer(Player player) {
+        Menu menu = CivMenu.newMenu("Namelaye Help - Hover for info, click to use:\n");
+        
+        menu.addEntry("Create")
+                .setHover("Creates a group, default is private unless public is specified\n/nlcg <group> [group-type] [password]")
+                .setSuggest("/nlcg ");
+        menu.addEntry("Delete")
+                .setHover("Deletes a group\n/nldg <group>")
+                .setSuggest("/nldg ");
+        menu.addEntry("Invite")
+                .setHover("Invite player to the group, default is member unless another rank is specified\n/nlip <group> <player-name> [rank]")
+                .setSuggest("/nlip ");
+        menu.addEntry("Revoke")
+                .setHover("Revoke Player's invitation to a grou\n/nlri <group> <player-name>")
+                .setSuggest("/nlr ");
+        menu.addEntry("Join")
+                .setHover("Join a password protected group\n/nljg <group> <password>")
+                .setSuggest("/nljg ");
+        menu.addEntry("Accept")
+                .setHover("Accept the invite the group\n/nlag <group>")
+                .setSuggest("/nlag ");
+        menu.addEntry("Leave")
+                .setHover("Leave a group group\n/nlleg <group>")
+                .setSuggest("/nlleg ");
+        menu.addEntry("List")
+                .setHover("List groups\n/nllg [page]")
+                .setSuggest("/nllg ");
+        menu.addEntry("Types")
+                .setHover("List group types (private and public)\n/nllgt")
+                .setSuggest("/nllgt ");
+        menu.addEntry("Invitations")
+                .setHover("List all group invitations\n/nllci")
+                .setSuggest("/nllci ");
+        menu.addEntry("Promote")
+                .setHover("Promote/Demote Player's rank within group\n/nlpp <group> <player> <rank>")
+                .setSuggest("/nlpp ");
+        menu.addEntry("Remove")
+                .setHover("Remove a player from a group\n/nlrm <group> <member>")
+                .setSuggest("/nlrm ");
+        menu.addEntry("Transfer")
+                .setHover("Transfer ownership of a group to a player\n/nltg <group> <player>")
+                .setSuggest("/nltg ");
+        menu.addEntry("Password")
+                .setHover("Add a password to a group\n/nlsp <group> <password>")
+                .setSuggest("/nlsp ");
+        menu.addEntry("+Permission")
+                .setHover("Grant a permission to a rank within a group\n/nlmp <group> <add> <Rank> <PermissionType>")
+                .setSuggest("/nlmp ");
+        menu.addEntry("-Permission")
+                .setHover("Remove a permission from a rank within a group\n/nlmp <group> <remove> <Rank> <PermissionType>")
+                .setSuggest("/nlmp ");
+        menu.addEntry("Permissions")
+                .setHover("List the permissions a rank has within a group\n/nllp <group> <Rank>")
+                .setSuggest("/nllp ");
+        menu.addEntry("Auto")
+                .setHover("Toggle auto acceptance of invites\n/nltaai")
+                .setSuggest("/nltaai ");
+        menu.addEntry("Default")
+                .setHover("Set or Change Default Group\n/nlsdg <group>")
+                .setSuggest("/nlsdg ");
+        menu.addEntry("Default?")
+                .setHover("Returns current default group\n/nlgdg")
+                .setSuggest("/nlgdg ");
+        menu.send(player);
     }
 }
