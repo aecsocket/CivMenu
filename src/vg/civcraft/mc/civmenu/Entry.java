@@ -1,15 +1,13 @@
 package vg.civcraft.mc.civmenu;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import static vg.civcraft.mc.civmenu.Utility.PrettyItem;
 
 /**
  * Entrys are the text components that make up a Menu. Each entry display a
@@ -46,6 +44,11 @@ public class Entry {
 
     public Entry(List<Object> text) {
         this.text = text;
+    }
+
+    public Entry(String text) {
+        this.text = new ArrayList<Object>();
+        this.text.add(text);
     }
 
     /**
@@ -228,11 +231,15 @@ public class Entry {
             if (object instanceof String) {
                 str += (String) object;
             } else if (object instanceof ItemStack) {
-                str += PrettyItem((ItemStack) object);
+                str += Utility.PrettyItem((ItemStack) object);
             } else if (object instanceof Set<?>) {
-                List<Object> setObjects = new ArrayList<Object>();
-                setObjects.addAll((Set<?>) object);
-                str += toString(setObjects);
+                Set<ItemStack> itemStacks = new HashSet<ItemStack>();
+                for (Object setObject : (Set<?>) object) {
+                    if (setObject instanceof ItemStack) {
+                        itemStacks.add((ItemStack) setObject);
+                    }
+                }
+                str+=PrettyItem(itemStacks);
             }
         }
         return str;
@@ -250,54 +257,18 @@ public class Entry {
             if (object instanceof String) {
                 json.put(objects);
             } else if (object instanceof ItemStack) {
-                json.put(new JSONObject().put("test", PrettyItem((ItemStack) object)));
+                json.put(new JSONObject().put("text", PrettyItem((ItemStack) object)));
             } else if (object instanceof Set<?>) {
-                List<Object> setObjects = new ArrayList<Object>();
-                setObjects.addAll((Set<?>) object);
-                JSONArray setArray = toJSONArray(setObjects);
-                for (int i = 0; i < setArray.length(); i++) {
-                    json.put(setArray.get(i));
+                Set<ItemStack> itemStacks = new HashSet<ItemStack>();
+                for (Object setObject : (Set<?>) object) {
+                    if (setObject instanceof ItemStack) {
+                        itemStacks.add((ItemStack) setObject);
+                    }
                 }
+                json.put(new JSONObject().put("text", PrettyItem(itemStacks)));
             }
         }
         return json;
 
-    }
-    static Map<ItemStack, String> prettyNames = new HashMap<ItemStack, String>();
-
-    /**
-     * Convert a ItemSet to a pretty string
-     *
-     * If the item has a custom DisplayName it uses that, then if it has an
-     * entry in the pretty name lookup table use that, otherwise use bukkit name
-     *
-     * @param itemStacks ItemStakcs to convert to string
-     * @return Pretty String representing ItemStacks
-     */
-    static String PrettyItem(Set<ItemStack> itemStacks) {
-        String output = "";
-        for (ItemStack itemStack : itemStacks) {
-            output += PrettyItem(itemStack) + ",";
-        }
-        //Remove trailing ","
-        if (output.length() != 0) {
-            output = output.substring(0, output.length() - 1);
-        }
-        return output;
-    }
-
-    static String PrettyItem(ItemStack itemStack) {
-        ItemStack key = itemStack.clone();
-        key.setAmount(1);
-
-        if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
-            return itemStack.getAmount() + " " + itemStack.getItemMeta().getDisplayName();
-        } else {
-            if (prettyNames.containsKey(key)) {
-                return itemStack.getAmount() + " " + prettyNames.get(key);
-            } else {
-                return itemStack.getAmount() + " " + itemStack.getType().name() + ":" + itemStack.getDurability();
-            }
-        }
     }
 }

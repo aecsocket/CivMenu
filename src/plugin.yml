@@ -1,0 +1,6 @@
+name: CivMenu
+main: vg.civcraft.mc.civmenu.CivMenu
+author: gmlaxfanatic
+version: 0.0
+commands:
+    civmenu:

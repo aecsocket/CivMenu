@@ -29,9 +29,9 @@ import org.json.JSONObject;
 public class Menu {
 
     List<Entry> entrys;
-    CivMenuManager manager;
+    Manager manager;
 
-    public Menu(CivMenuManager manager) {
+    public Menu(Manager manager) {
         this.manager = manager;
         this.entrys = new ArrayList<Entry>();
     }
@@ -78,6 +78,7 @@ public class Menu {
     public void send(Player player) {
         ActiveMenu active = getActiveMenu(player);
         manager.registerActive(active.ID, active);
+        CivMenu.toConsole(active.message);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(active.message)));
     }
 

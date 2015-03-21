@@ -1,5 +1,6 @@
 package vg.civcraft.mc.civmenu;
 
+import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,11 +21,17 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class CivMenu extends JavaPlugin {
 
-    private static CivMenuManager manager;
+    private static Manager manager;
 
     @Override
     public void onEnable() {
-        manager = new CivMenuManager(this);
+        
+        //Load in pretty item names
+        toConsole("Loading materials.csv");
+        this.saveResource("materials.csv", true);
+        Utility.loadPrettyNames(new File(getDataFolder() + "/materials.csv"));
+        
+        manager = new Manager(this);
     }
 
     @Override
