@@ -50,6 +50,7 @@ public class Manager {
         } catch (NumberFormatException e) {
             return false;
         }
+        CivMenu.toConsole("Handeling command "+args.toString());
         ActiveMenu active = actives.get(ID);
         actives.remove(ID);
         return active.execute(sender, index);
@@ -70,6 +71,7 @@ public class Manager {
 
     void registerActive(final String ID, ActiveMenu active) {
         actives.put(ID, active);
+        CivMenu.toConsole(actives.toString());
         new BukkitRunnable() {
             String newID = ID;
 
@@ -95,6 +97,9 @@ public class Manager {
                 return true;
             case "insertion":
                 debugInsertion(player);
+                return true;
+            case "nested":
+                debugNestedMenus(player);
                 return true;
         }
         return false;
@@ -133,6 +138,13 @@ public class Manager {
         Menu menu = CivMenu.newMenu();
         menu.addEntry("Insertion Text: ");
         menu.addEntry("Shift Click Me").setInsertion("Inserted Text");
+        menu.send(player);
+    }
+    
+    void debugNestedMenus(Player player) {
+        Menu menu = CivMenu.newMenu("Nested Menu test: ");
+        Menu menu2 = CivMenu.newMenu("Second Menu");
+        menu.addEntry("Second Menu").setCommand(menu2);
         menu.send(player);
     }
 }

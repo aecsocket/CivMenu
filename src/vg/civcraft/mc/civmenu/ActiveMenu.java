@@ -30,7 +30,9 @@ public class ActiveMenu {
     }
 
     public boolean execute(CommandSender sender, int index) {
-        if (index > 0 && index < commands.size()) {
+        CivMenu.toConsole("Executing "+ID+" "+args.toString());
+        if (index >= 0 && index < commands.size()) {
+            CivMenu.toConsole("Executing "+ID+" "+index);
             return commands.get(index).execute(sender, args.get(index));
         }
         return false;

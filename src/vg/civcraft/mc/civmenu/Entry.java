@@ -80,8 +80,8 @@ public class Entry {
             content.put("hoverEvent", hoverEvent.toString());
         }
         if (command != null) {
-            JSONObject clickEvent = new JSONObject().put("action", "run_command").put("value", "ID");
-            content.put("clickEvent", clickEvent.toString());
+            JSONObject clickEvent = new JSONObject().put("action", "run_command").put("value", ID);
+            content.put("clickEvent", clickEvent);
         }
         if (insertion != null) {
             content.put("insertion", insertion);

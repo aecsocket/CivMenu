@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
-import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.json.JSONObject;
@@ -26,7 +26,7 @@ import org.json.JSONObject;
  * Menu.send(player);
  * </pre>
  */
-public class Menu {
+public class Menu implements MenuCommand {
 
     List<Entry> entrys;
     Manager manager;
@@ -52,7 +52,7 @@ public class Menu {
             //Registers the command with the active menu
             if (entry.isClickable()) {
                 active.addCommand(entry.getCommand(), entry.getArgs());
-                entryJSON = entry.toJSON("/" + ID + " " + index);
+                entryJSON = entry.toJSON("/" + Manager.COMMMAND_NAME + " " + ID + " " + index);
                 index++;
             } else {
                 entryJSON = entry.toJSON();
@@ -68,6 +68,16 @@ public class Menu {
         message += "]";
         active.setMessage(message);
         return active;
+    }
+
+    @Override
+    public boolean execute(CommandSender sender, String[] args) {
+        CivMenu.toConsole(Boolean.toString(sender instanceof Player));
+        if (sender instanceof Player) {
+            send((Player) sender);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -200,7 +210,7 @@ public class Menu {
      * Sets the command and args of the last Entry
      *
      * @param command Command to set
-     * @param args    Args to set
+     * @param args Args to set
      * @return This menu
      */
     public Menu setCommand(MenuCommand command, String[] args) {

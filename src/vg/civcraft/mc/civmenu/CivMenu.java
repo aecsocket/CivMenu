@@ -25,12 +25,12 @@ public class CivMenu extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        
+
         //Load in pretty item names
         toConsole("Loading materials.csv");
         this.saveResource("materials.csv", true);
         Utility.loadPrettyNames(new File(getDataFolder() + "/materials.csv"));
-        
+
         manager = new Manager(this);
     }
 
@@ -44,8 +44,25 @@ public class CivMenu extends JavaPlugin {
         return manager.handelCommand(sender, cmd, label, args);
     }
 
+    /**
+     * Used to generate Menu objects
+     *
+     * @return A new menu
+     */
     public static Menu newMenu() {
         return new Menu(manager);
+    }
+
+    /**
+     * Used to generate a Menu with the first entry already containing text
+     *
+     * @param text Text of the first entry
+     * @return Menu containing a single entry with Text
+     */
+    public static Menu newMenu(String text) {
+        Menu menu = new Menu(manager);
+        menu.addEntry(text);
+        return menu;
     }
 
     /**
