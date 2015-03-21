@@ -47,6 +47,11 @@ public class Menu implements MenuCommand {
         String message = "[";
         //Iterate through items adding them to the JSON String
         int index = 0;
+        //Add divider
+        message+=new JSONObject().put("color","yellow")
+                .put("text","_____________________________________________________\n")
+                .toString()+",";
+        //Add Entrys
         for (Entry entry : entrys) {
             List<JSONObject> entryJSON;
             //Registers the command with the active menu

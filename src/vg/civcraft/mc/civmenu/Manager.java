@@ -101,6 +101,9 @@ public class Manager {
             case "nested":
                 debugNestedMenus(player);
                 return true;
+            case "hover":
+                debugHover(player);
+                return true;
         }
         return false;
     }
@@ -121,7 +124,7 @@ public class Manager {
     void debugFancyText(Player player) {
         Menu menu = CivMenu.newMenu();
         List list = new ArrayList();
-        list.add("ItemStack converted to text");
+        list.add("ItemStack converted to text\n");
         list.add(new ItemStack(Material.CHEST));
         menu.addEntry(list);
         List list2 = new ArrayList();
@@ -145,6 +148,12 @@ public class Manager {
         Menu menu = CivMenu.newMenu("Nested Menu test: ");
         Menu menu2 = CivMenu.newMenu("Second Menu");
         menu.addEntry("Second Menu").setCommand(menu2);
+        menu.send(player);
+    }
+    
+    void debugHover(Player player) {
+        Menu menu = CivMenu.newMenu("Hover test\n");
+        menu.addEntry("Hover Me!").setHover("Hover Text");
         menu.send(player);
     }
 }

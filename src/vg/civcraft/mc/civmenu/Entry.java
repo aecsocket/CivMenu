@@ -76,8 +76,8 @@ public class Entry {
         //JSONObject content = new JSONObject();
         //content..put("color", "yellow");
         if (hover != null) {
-            JSONObject hoverEvent = new JSONObject().put("action", "showText").put("value", toJSONArray(hover));
-            content.put("hoverEvent", hoverEvent.toString());
+            JSONObject hoverEvent = new JSONObject().put("action", "show_text").put("value", toJSONArray(hover));
+            content.put("hoverEvent", hoverEvent);
         }
         if (command != null) {
             JSONObject clickEvent = new JSONObject().put("action", "run_command").put("value", ID);
@@ -164,7 +164,7 @@ public class Entry {
     public Entry setHover(String hover) {
         ArrayList<Object> list = new ArrayList<Object>();
         list.add(hover);
-        return setText(list);
+        return setHover(list);
     }
 
     /**
@@ -255,7 +255,7 @@ public class Entry {
         JSONArray json = new JSONArray();
         for (Object object : objects) {
             if (object instanceof String) {
-                json.put(objects);
+                json.put(new JSONObject().put("text", (String) object));
             } else if (object instanceof ItemStack) {
                 json.put(new JSONObject().put("text", PrettyItem((ItemStack) object)));
             } else if (object instanceof Set<?>) {
