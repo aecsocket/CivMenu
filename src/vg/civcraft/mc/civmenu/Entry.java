@@ -36,20 +36,15 @@ import static vg.civcraft.mc.civmenu.Utility.PrettyItem;
  */
 public class Entry {
 
-    List<Object> text;
-    List<Object> hover;
-    List<Object> suggest;
-    String insertion;
+    Content text;
+    Content hover;
+    Content suggest;
+    Content insertion;
     MenuCommand command;
     String[] args;
 
-    public Entry(List<Object> text) {
-        this.text = text;
-    }
-
-    public Entry(String text) {
-        this.text = new ArrayList<Object>();
-        this.text.add(text);
+    public Entry(Object... text) {
+        this.text = new Content(text);
     }
 
     /**
@@ -76,26 +71,27 @@ public class Entry {
      */
     List<JSONObject> toJSON(String ID) {
         List<JSONObject> json = new ArrayList<JSONObject>();
-        JSONObject content = new JSONObject().put("text", toString(text));
-        content.put("color", isClickable() ? "white" : "yellow");
-        //JSONObject content = new JSONObject();
+        JSONObject coreText = new JSONObject().put("text", text.toString());
+        //JSONObject coreText = new JSONObject();
         //content..put("color", "yellow");
         if (hover != null) {
-            JSONObject hoverEvent = new JSONObject().put("action", "show_text").put("value", toJSONArray(hover));
-            content.put("hoverEvent", hoverEvent);
+            JSONObject hoverEvent = new JSONObject().put("action", "show_text").put("value", hover.toJSONArray());
+            coreText.put("hoverEvent", hoverEvent);
         }
         if (command != null) {
             JSONObject clickEvent = new JSONObject().put("action", "run_command").put("value", ID);
-            content.put("clickEvent", clickEvent);
+            coreText.put("clickEvent", clickEvent);
         } else if (suggest != null) {
-            JSONObject clickEvent = new JSONObject().put("action", "suggest_command").put("value", toString(suggest));
-            content.put("clickEvent", clickEvent);
+            JSONObject clickEvent = new JSONObject().put("action", "suggest_command").put("value", suggest.toString());
+            coreText.put("clickEvent", clickEvent);
         }
         if (insertion != null) {
-            content.put("insertion", insertion);
+            coreText.put("insertion", insertion.toString());
         }
-
-        json.add(content);
+        //Add white coloring to clickable entrys
+        coreText.put("color", isClickable() ? "white" : "yellow");
+        //Add bracket styling to clickable Entrys
+        json.add(coreText);
         if (isClickable()) {
             JSONObject leftBracket = new JSONObject().put("text", "[").put("color", "yellow");
             JSONObject rightBracket = new JSONObject().put("text", "]").put("color", "yellow");
@@ -118,31 +114,17 @@ public class Entry {
     }
 
     /**
-     * Sets the text of the Entry ot the String
-     *
-     * @param text Text to set
-     * @return This Entry
-     */
-    public Entry setText(String text) {
-        ArrayList<Object> list = new ArrayList<Object>();
-        list.add(text);
-        return setText(list);
-    }
-
-    /**
      * Sets the text of the Entry
      *
-     * The text is given as a List of Objects to enable built in parsing by the
+     * The text is given as an array of Objects to enable built in parsing by the
      * entry class of objects such as ItemStack, Set{@literal <ItemStack\>}, or
-     * just String. Vanilla objects and objects with custom display names will
-     * be parsed according to # DISPLAY_NAME, newer items not contained within
-     * the lookup file will be displayed by MATERIAL_NAME:DURABILITY
+     * just String.
      *
      * @param text Text of the Entry
      * @return This Entry
      */
-    public Entry setText(List<Object> text) {
-        this.text = text;
+    public Entry setText(Object... text) {
+        this.text = new Content(text);
         return this;
     }
 
@@ -151,28 +133,14 @@ public class Entry {
      *
      * The text is given as a List of Objects to enable built in parsing by the
      * entry class of objects such as ItemStack, Set{@literal <ItemStack\>}, or
-     * just String. Vanilla objects and objects with custom display names will
-     * be parsed according to # DISPLAY_NAME, newer items not contained within
-     * the lookup file will be displayed by MATERIAL_NAME:DURABILITY
+     * just String.
      *
      * @param hover What to set the hover to
      * @return This Entry
      */
-    public Entry setHover(List<Object> hover) {
-        this.hover = hover;
+    public Entry setHover(Object... hover) {
+        this.hover = new Content(hover);
         return this;
-    }
-
-    /**
-     * Sets the hover of the Entry to the given String
-     *
-     * @param hover What to set the hover to
-     * @return This Entry
-     */
-    public Entry setHover(String hover) {
-        ArrayList<Object> list = new ArrayList<Object>();
-        list.add(hover);
-        return setHover(list);
     }
 
     /**
@@ -181,8 +149,8 @@ public class Entry {
      * @param insertion The insertion of this Entry
      * @return This Entry
      */
-    public Entry setInsertion(String insertion) {
-        this.insertion = insertion;
+    public Entry setInsertion(Object... insertion) {
+        this.insertion = new Content(insertion);
         return this;
     }
 
@@ -191,28 +159,14 @@ public class Entry {
      *
      * The text is given as a List of Objects to enable built in parsing by the
      * entry class of objects such as ItemStack, Set{@literal <ItemStack\>}, or
-     * just String. Vanilla objects and objects with custom display names will
-     * be parsed according to # DISPLAY_NAME, newer items not contained within
-     * the lookup file will be displayed by MATERIAL_NAME:DURABILITY
+     * just String.
      *
      * @param suggest What to set the suggest to
      * @return This Entry
      */
-    public Entry setSuggest(List<Object> suggest) {
-        this.suggest = suggest;
+    public Entry setSuggest(Object... suggest) {
+        this.suggest = new Content(suggest);
         return this;
-    }
-
-    /**
-     * Sets the suggest of the Entry to the given String
-     *
-     * @param suggest What to set the suggest to
-     * @return This Entry
-     */
-    public Entry setSuggest(String suggest) {
-        ArrayList<Object> list = new ArrayList<Object>();
-        list.add(suggest);
-        return setSuggest(list);
     }
     
     /**
@@ -256,56 +210,4 @@ public class Entry {
         return args;
     }
 
-    /**
-     * Takes a list of objects and parses them into a str to display
-     *
-     * @param objects objects to be parsed
-     * @return String representing objects
-     */
-    private static String toString(List<Object> objects) {
-        String str = "";
-        for (Object object : objects) {
-            if (object instanceof String) {
-                str += (String) object;
-            } else if (object instanceof ItemStack) {
-                str += Utility.PrettyItem((ItemStack) object);
-            } else if (object instanceof Set<?>) {
-                Set<ItemStack> itemStacks = new HashSet<ItemStack>();
-                for (Object setObject : (Set<?>) object) {
-                    if (setObject instanceof ItemStack) {
-                        itemStacks.add((ItemStack) setObject);
-                    }
-                }
-                str += PrettyItem(itemStacks);
-            }
-        }
-        return str;
-    }
-
-    /**
-     * Takes a list of objects and parses them into a JSON array
-     *
-     * @param objects Objects to be parsed
-     * @return JSONArray representing objects
-     */
-    private static JSONArray toJSONArray(List<Object> objects) {
-        JSONArray json = new JSONArray();
-        for (Object object : objects) {
-            if (object instanceof String) {
-                json.put(new JSONObject().put("text", (String) object));
-            } else if (object instanceof ItemStack) {
-                json.put(new JSONObject().put("text", PrettyItem((ItemStack) object)));
-            } else if (object instanceof Set<?>) {
-                Set<ItemStack> itemStacks = new HashSet<ItemStack>();
-                for (Object setObject : (Set<?>) object) {
-                    if (setObject instanceof ItemStack) {
-                        itemStacks.add((ItemStack) setObject);
-                    }
-                }
-                json.put(new JSONObject().put("text", PrettyItem(itemStacks)));
-            }
-        }
-        return json;
-
-    }
 }

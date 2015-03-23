@@ -164,7 +164,9 @@ public class Manager {
     }
     
     void debugSuggest(Player player) {
-        CivMenu.newMenu("Suggest text\n").addEntry("Suggestion").setSuggest("\\ctr").send(player);
+        Menu menu = CivMenu.newMenu("Suggest text\n");
+        menu.addEntry("Suggestion").setSuggest("\\ctr");
+        menu.send(player);
     }
     
     void namelayer(Player player) {

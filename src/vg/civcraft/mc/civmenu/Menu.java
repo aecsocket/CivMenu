@@ -98,28 +98,16 @@ public class Menu implements MenuCommand {
     }
 
     /**
-     * Adds a new Entry to the menu with defined Text
-     *
-     * @param text Text of the Entry
-     * @return This Menu
-     */
-    public Menu addEntry(String text) {
-        ArrayList<Object> list = new ArrayList<Object>();
-        list.add(text);
-        return addEntry(list);
-    }
-
-    /**
      * Adds a new Entry to the menu with defined Text.
      *
-     * The text is given as a List of Objects to enable built in parsing by the
-     * entry class of objects such as ItemStack, Set{@literal <ItemStack\>}, or
-     * just String.
+     * The text is given as an array of Objects to enable built in parsing by
+     * the entry class of objects such as ItemStack, Set{@literal <ItemStack\>},
+     * or just String.
      *
      * @param text Text of the Entry in a list form
      * @return This Menu
      */
-    public Menu addEntry(List<Object> text) {
+    public Entry addEntry(Object... text) {
         return addEntry(new Entry(text));
     }
 
@@ -129,9 +117,9 @@ public class Menu implements MenuCommand {
      * @param entry Entry to add to menu
      * @return This menu
      */
-    public Menu addEntry(Entry entry) {
+    public Entry addEntry(Entry entry) {
         entrys.add(entry);
-        return this;
+        return entry;
     }
 
     /**
@@ -143,106 +131,4 @@ public class Menu implements MenuCommand {
     public Entry getEntry(int index) {
         return entrys.get(index);
     }
-
-    /**
-     * Sets the text of the last entry in the menu
-     *
-     * @param text Text to set of Entry
-     * @return This menu
-     */
-    public Menu setText(List<Object> text) {
-        entrys.get(entrys.size() - 1).setText(text);
-        return this;
-    }
-
-    /**
-     * Sets the text of the last entry in the menu
-     *
-     * @param text Text to set of Entry
-     * @return This menu
-     */
-    public Menu setText(String text) {
-        entrys.get(entrys.size() - 1).setText(text);
-        return this;
-    }
-
-    /**
-     * Sets the hover of the last Entry in the Menu
-     *
-     * @param hover Hover to set of Entry
-     * @return This menu
-     */
-    public Menu setHover(List<Object> hover) {
-        entrys.get(entrys.size() - 1).setHover(hover);
-        return this;
-    }
-
-    /**
-     * Sets the hover of the last Entry in the Menu
-     *
-     * @param hover Hover to set of Entry
-     * @return This menu
-     */
-    public Menu setHover(String hover) {
-        entrys.get(entrys.size() - 1).setHover(hover);
-        return this;
-    }
-
-    /**
-     * Sets the suggest of the last Entry in the Menu
-     *
-     * @param suggest suggest to set of Entry
-     * @return This menu
-     */
-    public Menu setSuggest(List<Object> suggest) {
-        entrys.get(entrys.size() - 1).setSuggest(suggest);
-        return this;
-    }
-
-    /**
-     * Sets the suggest of the last Entry in the Menu
-     *
-     * @param suggest Suggest to set of Entry
-     * @return This menu
-     */
-    public Menu setSuggest(String suggest) {
-        entrys.get(entrys.size() - 1).setSuggest(suggest);
-        return this;
-    }
-
-    /**
-     * Sets the Insertion of the last Entry in the Menu
-     *
-     * @param insertion
-     * @return This Menu
-     */
-    public Menu setInsertion(String insertion) {
-        entrys.get(entrys.size() - 1).setInsertion(insertion);
-        return this;
-
-    }
-
-    /**
-     * Sets the command of the last Entry
-     *
-     * @param command Command to set
-     * @return This Menu
-     */
-    public Menu setCommand(MenuCommand command) {
-        entrys.get(entrys.size() - 1).setCommand(command);
-        return this;
-    }
-
-    /**
-     * Sets the command and args of the last Entry
-     *
-     * @param command Command to set
-     * @param args Args to set
-     * @return This menu
-     */
-    public Menu setCommand(MenuCommand command, String[] args) {
-        entrys.get(entrys.size() - 1).setCommand(command, args);
-        return this;
-    }
-
 }
