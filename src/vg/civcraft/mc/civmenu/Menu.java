@@ -2,10 +2,11 @@ package vg.civcraft.mc.civmenu;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
+
+import net.minecraft.server.v1_13_R2.IChatBaseComponent;
+import net.minecraft.server.v1_13_R2.PacketPlayOutChat;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
@@ -94,7 +95,7 @@ public class Menu implements MenuCommand {
         ActiveMenu active = getActiveMenu(player);
         manager.registerActive(active.ID, active);
         CivMenu.toConsole(active.message);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(active.message)));
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a(active.message)));
     }
 
     /**

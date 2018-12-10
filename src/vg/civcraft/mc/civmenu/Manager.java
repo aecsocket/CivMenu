@@ -26,7 +26,7 @@ public class Manager {
 
     Manager(Plugin plugin) {
         this.plugin = plugin;
-        this.actives = new HashMap<String, ActiveMenu>();
+        this.actives = new HashMap<>();
 
     }
 

@@ -29,7 +29,9 @@ public class CivMenu extends JavaPlugin {
         //Load in pretty item names
         toConsole("Loading materials.csv");
         this.saveResource("materials.csv", true);
-        Utility.loadPrettyNames(new File(getDataFolder() + "/materials.csv"));
+        // Use new loadPrettyNames
+        Utility.loadPrettyNames();
+        //Utility.loadPrettyNames(new File(getDataFolder() + "/materials.csv"));
 
         manager = new Manager(this);
     }

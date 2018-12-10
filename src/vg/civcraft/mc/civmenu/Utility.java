@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 
 /**
  *
@@ -21,17 +22,44 @@ import org.bukkit.inventory.ItemStack;
  */
 public class Utility {
 
-    static Map<ItemStack, String> prettyNames = new HashMap<ItemStack, String>();
+    static Map<ItemStack, String> prettyNames = new HashMap<>();
 
+    public static void loadPrettyNames() {
+        prettyNames = new HashMap<>();
+        for (Material mat : Material.values()) {
+            prettyNames.put(new ItemStack(mat), getPrettyName(mat));
+        }
+    }
+
+    private static String getPrettyName(Material mat) {
+        String ret = mat.name();
+        String[] words = ret.split("_");
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if (word.length() > 1)
+                word = word.substring(0, 0).toUpperCase() + word.substring(1).toLowerCase();
+            else
+                word = word.toUpperCase();
+            words[i] = word;
+        }
+        ret = "";
+        for (String word : words) {
+            ret += word + " ";
+        }
+        return ret;
+    }
+
+    /*
+    Don't load from a .csv file, instead iterate through all Material enums because 1.13 spigot update
     public static void loadPrettyNames(File file) {
-        prettyNames = new HashMap<ItemStack, String>();
+        prettyNames = new HashMap<>();
         // Read Items
         try {
             BufferedReader CSVFile = new BufferedReader(new FileReader(file));
             String dataRow = CSVFile.readLine();
             while (dataRow != null) {
                 String[] dataArray = dataRow.split(",");
-                prettyNames.put(new ItemStack(Material.getMaterial(Integer.valueOf(dataArray[2]).intValue()), 1, Short.valueOf(dataArray[3])), dataArray[0]);
+                prettyNames.put(new ItemStack(Material.valueOf(dataArray[1])), dataArray[0]);
                 dataRow = CSVFile.readLine();
             }
             CSVFile.close();
@@ -40,6 +68,7 @@ public class Utility {
             CivMenu.toConsole("Failed to load materials.csv");
         }
     }
+    */
 
     static String PrettyItem(ItemStack itemStack) {
         ItemStack key = itemStack.clone();
@@ -50,7 +79,7 @@ public class Utility {
             if (prettyNames.containsKey(key)) {
                 return itemStack.getAmount() + " " + prettyNames.get(key);
             } else {
-                return itemStack.getAmount() + " " + itemStack.getType().name() + ":" + itemStack.getDurability();
+                return itemStack.getAmount() + " " + itemStack.getType().name() + ":" + ((Damageable) itemStack.getItemMeta()).getDamage();
             }
         }
     }
