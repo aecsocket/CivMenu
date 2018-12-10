@@ -1,6 +1,5 @@
 package vg.civcraft.mc.civmenu;
 
-import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -43,7 +42,7 @@ public class CivMenu extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        return manager.handelCommand(sender, cmd, label, args);
+        return manager.handleCommand(sender, cmd, label, args);
     }
 
     /**

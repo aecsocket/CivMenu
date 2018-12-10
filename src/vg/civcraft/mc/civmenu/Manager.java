@@ -30,7 +30,7 @@ public class Manager {
 
     }
 
-    boolean handelCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    boolean handleCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!cmd.getName().equals(COMMMAND_NAME)) {
             return true;
         }
